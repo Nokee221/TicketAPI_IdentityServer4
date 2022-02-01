@@ -1,0 +1,60 @@
+﻿@page "/projects/{projectId:int}/tickets"
+@inject ITicketScreenUseCases TicketScreenUseCases
+
+<h3>Tickets</h3>
+<br />
+
+<div class="row">
+    <div class="col-auto">
+        <input type="text" class="form-control" @bind-value="searchFilter" />
+    </div>
+    <div class="col-auto">
+        <button type="button" class="btn btn-light" @onclick="OnSearch">Search</button>
+    </div>
+</div>
+<br />
+
+
+@searchFilter
+@if (tickets != null)
+{
+    <table class="table">
+        <thead>
+
+            <tr>
+                <th>Title</th>
+                <th>Owner</th>
+                <th>Report Date</th>
+                <th>Due Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in tickets)
+            {
+                <TicketRowComponent Ticket="ticket"></TicketRowComponent>
+            }
+
+        </tbody>
+    </table>
+
+
+}
+
+@code {
+
+    IEnumerable<Ticket> tickets;
+    string searchFilter;
+
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tickets = await TicketScreenUseCases.ViewTickets(ProjectId);
+    }
+
+    private async Task OnSearch()
+    {
+        await TicketScreenUseCases.SearchTickets(searchFilter);
+    }
+}

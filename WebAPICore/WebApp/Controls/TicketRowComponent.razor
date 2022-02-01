@@ -1,0 +1,18 @@
+﻿
+@if(Ticket != null)
+{
+    <tr>
+        <td>@Ticket.Title</td>
+        <td>@Ticket.Owner</td>
+        <td>@Ticket.ReportDate</td>
+        <td>@Ticket.DueDate</td>
+    </tr>
+
+}
+
+@code {
+
+    [Parameter]
+    public Ticket Ticket { get; set; }
+
+}
