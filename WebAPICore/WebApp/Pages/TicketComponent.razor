@@ -1,6 +1,9 @@
 ﻿@page "/tickets/{ticketId:int}"
+@page "/project/{projectId:int}/addticket"
+
 @inject NavigationManager NavigatorManager
 @inject ITicketScreenUseCases TicketScreenUseCases
+@inject ITicketsScreenUseCases TicketsScreenUseCases
 
 <h3>Ticket</h3>
 <br />
@@ -45,12 +48,23 @@
     AlertComponent alertComponent;
 
     [Parameter]
-    public int TicketId { get; set; }
+    public int? TicketId { get; set; }
+
+    [Parameter]
+    public int? ProjectId { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
 
-        ticket = await TicketScreenUseCases.ViewTicketById(TicketId);
+        if (TicketId.HasValue)
+        {
+            ticket = await TicketScreenUseCases.ViewTicketById(TicketId.Value);
+
+        }
+
+
+        if (ProjectId.HasValue && ticket == null)
+            ticket = new Ticket { ProjectId = this.ProjectId.Value };
     }
 
     void Save()
@@ -96,7 +110,15 @@
 
         if (bSuccess)
         {
-            TicketScreenUseCases.UpdateTicket(ticket);
+            if (TicketId.HasValue)
+            {
+
+                TicketScreenUseCases.UpdateTicket(ticket);
+            }
+            else
+            {
+                TicketsScreenUseCases.AddTicket(ticket);
+            }
             NavigatorManager.NavigateTo($"/projects/{ticket.ProjectId}/ticekts");
         }
 

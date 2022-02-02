@@ -24,6 +24,7 @@ namespace WebApp
             builder.Services.AddTransient<IProjectsScreenUseCase, ProjectsScreenUseCase>();
             builder.Services.AddTransient<IProjectRepository, ProjectRepository>();
             builder.Services.AddTransient<ITicketScreenUseCases, TicketScreenUseCases>();
+            builder.Services.AddTransient<ITicketsScreenUseCases, TicketsScreenUseCases>();
             builder.Services.AddTransient<ITicketRepository, TicketRepository>();
             
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
