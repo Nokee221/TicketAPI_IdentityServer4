@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.QueryFilters;
 
 namespace PlatformDemo.Controller
 {
@@ -41,14 +42,20 @@ namespace PlatformDemo.Controller
 
         [HttpGet]
         [Route("/api/projects/{pid}/tickets")]
-        public async Task<IActionResult> GetProjectTickets(int pId)
+        public async Task<IActionResult> GetProjectTickets(int pId,[FromQuery] ProjectTicketQueryFilter filter)
         {
-            var tickets = await _context.Tickets.Where(t => t.ProjectId == pId).ToListAsync();
+            IQueryable<Ticket> tickets = _context.Tickets.Where(t => t.ProjectId == pId);
 
-            if (tickets == null || tickets.Count <= 0)
+            if(filter != null && !string.IsNullOrWhiteSpace(filter.Owner))
+            {
+                tickets = tickets.Where(x => !string.IsNullOrWhiteSpace(x.Owner) && x.Owner.ToLower() == filter.Owner.ToLower());
+            }
+
+            var listTickets = await tickets.ToListAsync();
+            if (listTickets == null || listTickets.Count <= 0)
                 return NotFound();
 
-            return Ok(tickets);
+            return Ok(listTickets);
         }
 
         [HttpPost]

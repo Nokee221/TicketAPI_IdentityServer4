@@ -11,11 +11,16 @@
     <div class="col-auto">
         <button type="button" class="btn btn-light" @onclick="OnSearch">Search</button>
     </div>
+    <div class="col-auto">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="myticket" @bind-value="ViewMyTickets"/>
+            <label class="form-check-inline" for="myticket">View My Tickets</label>
+        </div>
+    </div>
 </div>
 <br />
 
 
-@searchFilter
 @if (tickets != null)
 {
     <table class="table">
@@ -47,6 +52,34 @@
 
     [Parameter]
     public int ProjectId { get; set; }
+
+    bool viewMyTickets = false;
+    public bool ViewMyTickets {
+
+        get => viewMyTickets;
+        set
+        {
+            viewMyTickets = value;
+            Task.Run( async () =>
+            {
+                if (viewMyTickets)
+                {
+                    tickets = await TicketScreenUseCases.ViewOwnersTickets(ProjectId, "Frank Liu");
+
+                }
+                else
+                {
+                    tickets = await TicketScreenUseCases.ViewTickets(ProjectId);
+
+                }
+
+                StateHasChanged();
+
+            });
+
+
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {

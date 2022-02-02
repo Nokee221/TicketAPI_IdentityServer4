@@ -72,6 +72,16 @@ namespace DataStore
                         Owner = "Frank Liu",
                         ReportDate = new DateTime(2022, 4, 4),
                         DueDate = new DateTime(2022, 5, 5),
+                    },
+
+                    new Ticket
+                    {
+                        TicketId = 4,
+                        ProjectId = 1,
+                        Title = "Swagger bug",
+                        Owner = "Kenan Cosic",
+                        ReportDate = new DateTime(2022, 4, 4),
+                        DueDate = new DateTime(2022, 5, 5),
                     }
                 );
         }
