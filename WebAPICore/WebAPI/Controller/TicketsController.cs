@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Filters;
 using WebAPI.QueryFilters;
 
 namespace PlatformDemo.Controller
@@ -13,6 +14,7 @@ namespace PlatformDemo.Controller
     [ApiVersion("1.0")]
     [ApiController]
     [Route("api/[controller]")]
+    [APIKeyAuthFilterAttribute]
     public class TicketsController : ControllerBase
     {
         private readonly BugsContext context;
